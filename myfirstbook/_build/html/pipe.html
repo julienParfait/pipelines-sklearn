@@ -1,0 +1,1171 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Création de Pipelines avec Sklearn &#8212; My sample book</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'pipe';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to your Jupyter Book" href="intro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="My sample book - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="My sample book - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Welcome to your Jupyter Book
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Création de Pipelines avec Sklearn</a></li>
+
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2Fpipe.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/pipe.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Création de Pipelines avec Sklearn</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Création de Pipelines avec Sklearn</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importation-des-librairies">Importation des librairies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separation-des-types-de-variables">Separation des types de variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-des-transformer-pour-chaque-type-de-variable">Definition des transformer pour chaque type de variable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-des-transformers-sur-chaque-type-de-variable">Application des transformers sur chaque type de variable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creation-du-pipeline">Creation du pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-a-un-jeu-de-donnees">Application a un jeu de données</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-viz-avec-plotly">Data viz avec plotly</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bar-plot-empilees">Bar plot empilées</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#barplot">Barplot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphes-avec-deux-axes">Graphes avec deux axes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphe-a-barres-empilees-vertical">Graphe à barres empilées vertical</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphe-a-barres-groupees">Graphe à barres groupées</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphe-a-barres-empilees-horizontal">Graphe à barres empilées horizontal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogramme">Histogramme</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#box-plot">Box-plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nuage-de-points">Nuage de points</a></li>
+</ul>
+</li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="creation-de-pipelines-avec-sklearn">
+<h1>Création de Pipelines avec Sklearn<a class="headerlink" href="#creation-de-pipelines-avec-sklearn" title="Link to this heading">#</a></h1>
+<div style="text-align: center;">
+    <img src="https://cdn.pixabay.com/photo/2022/12/09/03/51/big-data-7644530_1280.jpg" alt="Mon Image" style="width: 1000px; height:400px; auto;"/>
+</div><p>Un pipeline en machine learning est un outil structurant permettant d’automatiser et de simplifier le flux de traitement des données et de modélisation. Il consiste en une séquence ordonnée d’étapes, où chaque étape correspond à une transformation spécifique (prétraitement, sélection de caractéristiques, etc.) ou à un modèle d’apprentissage. L’objectif principal d’un pipeline est de garantir un traitement cohérent des données, depuis leur préparation jusqu’à l’entraînement et la prédiction, en minimisant le risque d’erreurs manuelles. En encapsulant toutes les étapes dans une seule entité, un pipeline favorise la réplicabilité, améliore la lisibilité du code et facilite la validation croisée sur des processus complets. Il est donc crucial en machine learning pour développer des modèles robustes et maintenables, surtout dans des environnements où la préparation des données et l’entraînement des modèles nécessitent une grande cohérence et rigueur.</p>
+<p>Dans ce notebook, je présente tour à tour les étapes de construction d’un pipeline simple de traitement transofrmation, traitement de données.</p>
+<section id="importation-des-librairies">
+<h2>Importation des librairies<a class="headerlink" href="#importation-des-librairies" title="Link to this heading">#</a></h2>
+<hr class="docutils" />
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.pipeline</span> <span class="kn">import</span> <span class="n">make_pipeline</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="n">StandardScaler</span><span class="p">,</span> <span class="n">MinMaxScaler</span><span class="p">,</span> <span class="n">RobustScaler</span><span class="p">,</span> <span class="n">MaxAbsScaler</span>
+<span class="kn">from</span> <span class="nn">sklearn.linear_model</span> <span class="kn">import</span> <span class="n">SGDClassifier</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span> 
+<span class="kn">from</span> <span class="nn">sklearn.impute</span> <span class="kn">import</span> <span class="n">KNNImputer</span><span class="p">,</span><span class="n">SimpleImputer</span>
+<span class="kn">from</span> <span class="nn">sklearn.preprocessing</span> <span class="kn">import</span> <span class="p">(</span><span class="n">LabelEncoder</span><span class="p">,</span> <span class="n">OrdinalEncoder</span><span class="p">,</span> <span class="n">OneHotEncoder</span><span class="p">,</span>
+                                    <span class="n">LabelBinarizer</span><span class="p">,</span> <span class="n">MultiLabelBinarizer</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">make_column_transformer</span>
+<span class="kn">from</span> <span class="nn">sklearn.compose</span> <span class="kn">import</span> <span class="n">make_column_selector</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="separation-des-types-de-variables">
+<h2>Separation des types de variables<a class="headerlink" href="#separation-des-types-de-variables" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">numeric</span> <span class="o">=</span> <span class="n">make_column_selector</span><span class="p">(</span><span class="n">dtype_include</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+
+<span class="n">categorical</span> <span class="o">=</span>  <span class="n">make_column_selector</span><span class="p">(</span><span class="n">dtype_exclude</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">number</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="definition-des-transformer-pour-chaque-type-de-variable">
+<h2>Definition des transformer pour chaque type de variable<a class="headerlink" href="#definition-des-transformer-pour-chaque-type-de-variable" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pipe_numeric</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">SimpleImputer</span><span class="p">(),</span>
+                             <span class="n">StandardScaler</span><span class="p">())</span>
+
+<span class="n">pipeline_cat</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span><span class="n">SimpleImputer</span><span class="p">(</span><span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;most_frequent&#39;</span><span class="p">),</span>
+                             <span class="n">OneHotEncoder</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="application-des-transformers-sur-chaque-type-de-variable">
+<h2>Application des transformers sur chaque type de variable<a class="headerlink" href="#application-des-transformers-sur-chaque-type-de-variable" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">transformer_app</span> <span class="o">=</span>  <span class="n">make_column_transformer</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">pipe_numeric</span><span class="p">,</span> <span class="n">numeric</span><span class="p">),</span>
+    <span class="p">(</span><span class="n">pipeline_cat</span><span class="p">,</span> <span class="n">categorical</span><span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="creation-du-pipeline">
+<h2>Creation du pipeline<a class="headerlink" href="#creation-du-pipeline" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">traitement</span> <span class="o">=</span> <span class="n">make_pipeline</span><span class="p">(</span>
+    <span class="n">transformer_app</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="application-a-un-jeu-de-donnees">
+<h2>Application a un jeu de données<a class="headerlink" href="#application-a-un-jeu-de-donnees" title="Link to this heading">#</a></h2>
+<p>Vous pouvez utiliser n’importe quel jeu de données.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tips.csv&#39;</span><span class="p">)</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_bill&#39;</span><span class="p">]</span>
+
+<span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;total_bill&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">traitement</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
+<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">line</span> <span class="mi">1</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;tips.csv&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">y</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;total_bill&#39;</span><span class="p">]</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="n">X</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="s1">&#39;total_bill&#39;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="nn">File ~\Desktop\ETL\.venv\Lib\site-packages\pandas\io\parsers\readers.py:1026,</span> in <span class="ni">read_csv</span><span class="nt">(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, date_format, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options, dtype_backend)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1013</span> <span class="n">kwds_defaults</span> <span class="o">=</span> <span class="n">_refine_defaults_read</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1014</span>     <span class="n">dialect</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1015</span>     <span class="n">delimiter</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1022</span>     <span class="n">dtype_backend</span><span class="o">=</span><span class="n">dtype_backend</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1023</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1024</span> <span class="n">kwds</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwds_defaults</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1026</span> <span class="k">return</span> <span class="n">_read</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="n">kwds</span><span class="p">)</span>
+
+<span class="nn">File ~\Desktop\ETL\.venv\Lib\site-packages\pandas\io\parsers\readers.py:620,</span> in <span class="ni">_read</span><span class="nt">(filepath_or_buffer, kwds)</span>
+<span class="g g-Whitespace">    </span><span class="mi">617</span> <span class="n">_validate_names</span><span class="p">(</span><span class="n">kwds</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;names&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">))</span>
+<span class="g g-Whitespace">    </span><span class="mi">619</span> <span class="c1"># Create the parser.</span>
+<span class="ne">--&gt; </span><span class="mi">620</span> <span class="n">parser</span> <span class="o">=</span> <span class="n">TextFileReader</span><span class="p">(</span><span class="n">filepath_or_buffer</span><span class="p">,</span> <span class="o">**</span><span class="n">kwds</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">622</span> <span class="k">if</span> <span class="n">chunksize</span> <span class="ow">or</span> <span class="n">iterator</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">623</span>     <span class="k">return</span> <span class="n">parser</span>
+
+<span class="nn">File ~\Desktop\ETL\.venv\Lib\site-packages\pandas\io\parsers\readers.py:1620,</span> in <span class="ni">TextFileReader.__init__</span><span class="nt">(self, f, engine, **kwds)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1617</span>     <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kwds</span><span class="p">[</span><span class="s2">&quot;has_index_names&quot;</span><span class="p">]</span>
+<span class="g g-Whitespace">   </span><span class="mi">1619</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="p">:</span> <span class="n">IOHandles</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="ne">-&gt; </span><span class="mi">1620</span> <span class="bp">self</span><span class="o">.</span><span class="n">_engine</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_make_engine</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">)</span>
+
+<span class="nn">File ~\Desktop\ETL\.venv\Lib\site-packages\pandas\io\parsers\readers.py:1880,</span> in <span class="ni">TextFileReader._make_engine</span><span class="nt">(self, f, engine)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1878</span>     <span class="k">if</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1879</span>         <span class="n">mode</span> <span class="o">+=</span> <span class="s2">&quot;b&quot;</span>
+<span class="ne">-&gt; </span><span class="mi">1880</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="o">=</span> <span class="n">get_handle</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1881</span>     <span class="n">f</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1882</span>     <span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1883</span>     <span class="n">encoding</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1884</span>     <span class="n">compression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;compression&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1885</span>     <span class="n">memory_map</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;memory_map&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1886</span>     <span class="n">is_text</span><span class="o">=</span><span class="n">is_text</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1887</span>     <span class="n">errors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;encoding_errors&quot;</span><span class="p">,</span> <span class="s2">&quot;strict&quot;</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1888</span>     <span class="n">storage_options</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1889</span> <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1890</span> <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+<span class="g g-Whitespace">   </span><span class="mi">1891</span> <span class="n">f</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handles</span><span class="o">.</span><span class="n">handle</span>
+
+<span class="nn">File ~\Desktop\ETL\.venv\Lib\site-packages\pandas\io\common.py:873,</span> in <span class="ni">get_handle</span><span class="nt">(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)</span>
+<span class="g g-Whitespace">    </span><span class="mi">868</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">869</span>     <span class="c1"># Check whether the filename is to be opened in binary mode.</span>
+<span class="g g-Whitespace">    </span><span class="mi">870</span>     <span class="c1"># Binary mode does not support &#39;encoding&#39; and &#39;newline&#39;.</span>
+<span class="g g-Whitespace">    </span><span class="mi">871</span>     <span class="k">if</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span> <span class="ow">and</span> <span class="s2">&quot;b&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">872</span>         <span class="c1"># Encoding</span>
+<span class="ne">--&gt; </span><span class="mi">873</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">874</span>             <span class="n">handle</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">875</span>             <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">876</span>             <span class="n">encoding</span><span class="o">=</span><span class="n">ioargs</span><span class="o">.</span><span class="n">encoding</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">877</span>             <span class="n">errors</span><span class="o">=</span><span class="n">errors</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">878</span>             <span class="n">newline</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">879</span>         <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">880</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">881</span>         <span class="c1"># Binary mode</span>
+<span class="g g-Whitespace">    </span><span class="mi">882</span>         <span class="n">handle</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">handle</span><span class="p">,</span> <span class="n">ioargs</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;tips.csv&#39;
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section class="tex2jax_ignore mathjax_ignore" id="data-viz-avec-plotly">
+<h1>Data viz avec plotly<a class="headerlink" href="#data-viz-avec-plotly" title="Link to this heading">#</a></h1>
+<hr class="docutils" />
+<div style="text-align: center;">
+    <img src="https://cdn.pixabay.com/photo/2020/02/03/20/49/technology-4816658_1280.jpg" alt="Mon Image" style="width: 1000px; height:400px; auto;"/>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Librairies </span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">plotly.express</span> <span class="k">as</span> <span class="nn">px</span>
+<span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="bar-plot-empilees">
+<h2>Bar plot empilées<a class="headerlink" href="#bar-plot-empilees" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">plotly.graph_objects</span> <span class="k">as</span> <span class="nn">go</span>
+
+<span class="c1"># Données factices (chaque valeur est en pourcentage, donc entre 0 et 100)</span>
+<span class="n">years</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;2014&quot;</span><span class="p">,</span> <span class="s2">&quot;2015&quot;</span><span class="p">,</span> <span class="s2">&quot;2016&quot;</span><span class="p">,</span> <span class="s2">&quot;2017&quot;</span><span class="p">,</span> <span class="s2">&quot;2018&quot;</span><span class="p">,</span> <span class="s2">&quot;2019&quot;</span><span class="p">]</span>
+<span class="n">seed_angel</span> <span class="o">=</span> <span class="p">[</span><span class="mi">60</span><span class="p">,</span> <span class="mi">58</span><span class="p">,</span> <span class="mi">55</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>
+<span class="n">series_a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">35</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">25</span><span class="p">]</span>
+<span class="n">series_b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="n">series_c</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">]</span>
+<span class="n">series_d</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="n">series_e_plus</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">8</span><span class="p">]</span>
+<span class="n">other</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+
+<span class="c1"># Création du graphique avec des barres empilées</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+
+<span class="c1"># Ajout des barres pour chaque étape de financement</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Seed / Angel&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">seed_angel</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#4CAFDB&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Series A&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">series_a</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#B53FA1&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Series B&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">series_b</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#FF5C38&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Series C&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">series_c</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#264277&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Series D&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">series_d</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#15B399&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Series E+&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">series_e_plus</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#F2935A&#39;</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Other&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="n">years</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="p">[</span><span class="n">v</span><span class="o">/</span><span class="mi">100</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">other</span><span class="p">],</span> <span class="n">marker_color</span><span class="o">=</span><span class="s1">&#39;#D3D3D3&#39;</span><span class="p">))</span>
+
+<span class="c1"># Paramètres de mise en forme pour le mode sombre</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;stack&#39;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Part des transactions par niveau&quot;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Années&quot;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Pourcentage&quot;</span><span class="p">,</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">tickformat</span><span class="o">=</span><span class="s2">&quot;.0%&quot;</span><span class="p">,</span> <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]),</span>  <span class="c1"># Mise à jour de l&#39;axe pour un affichage correct en pourcentage</span>
+    <span class="n">legend_title</span><span class="o">=</span><span class="s2">&quot;Niveau de financement&quot;</span><span class="p">,</span>
+    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_dark&quot;</span><span class="p">,</span>  <span class="c1"># Mode sombre</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span>  <span class="c1"># Largeur du graphique</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">500</span>  <span class="c1"># Hauteur du graphique</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage du graphique</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="barplot">
+<h2>Barplot<a class="headerlink" href="#barplot" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;categorie&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Calcul de la fréquence et des pourcentages</span>
+<span class="n">frequences</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;categorie&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">value_counts</span><span class="p">(</span><span class="n">normalize</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span>
+<span class="c1"># On replace les noms des colonnes</span>
+<span class="n">frequences_df</span> <span class="o">=</span> <span class="n">frequences</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="c1"># On récupère les noms des colonnes</span>
+<span class="n">frequences_df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;categorie&#39;</span><span class="p">,</span> <span class="s1">&#39;pourcentage&#39;</span><span class="p">]</span>
+<span class="c1"># Création du graphique en barres</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">frequences_df</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;categorie&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;pourcentage&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;pourcentage&#39;</span><span class="p">)</span>
+<span class="c1"># Etiquettes de pourcentage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span><span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span> <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="c1"># Affichage du graphique</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Répartition des catégories&quot;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Catégorie&quot;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Pourcentage&quot;</span><span class="p">,</span>
+    <span class="n">yaxis_tickformat</span> <span class="o">=</span> <span class="s2">&quot;,.2f&quot;</span><span class="p">,</span>
+    <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="c1"># Afichage </span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;annee&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;2017&#39;</span><span class="p">,</span> <span class="s1">&#39;2018&#39;</span><span class="p">,</span> <span class="s1">&#39;2019&#39;</span><span class="p">,</span> <span class="s1">&#39;2020&#39;</span><span class="p">,</span> <span class="s1">&#39;2021&#39;</span><span class="p">,</span> <span class="s1">&#39;2022&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;PIB&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2500</span><span class="p">,</span> <span class="mi">2650</span><span class="p">,</span> <span class="mi">2800</span><span class="p">,</span> <span class="mi">2900</span><span class="p">,</span> <span class="mi">3050</span><span class="p">,</span> <span class="mi">3200</span><span class="p">]</span> 
+<span class="p">})</span>
+
+<span class="c1"># Graphique en barres </span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;annee&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;PIB&#39;</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s1">&#39;PIB&#39;</span><span class="p">,</span> <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;#003DA5&#39;</span><span class="p">])</span>
+
+<span class="c1"># Personnalisation des étiquettes</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span>
+    <span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.0f}</span><span class="s1"> M$&#39;</span><span class="p">,</span>  <span class="c1"># Format des étiquettes en millions de dollars</span>
+    <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">,</span>  <span class="c1"># Position au milieu des barres</span>
+    <span class="n">textfont</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">),</span>  <span class="c1"># Couleur blanche pour les étiquettes</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.6</span>
+<span class="p">)</span>
+
+
+
+
+<span class="c1"># Configuration du layout pour le graphique</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Évolution du PIB en millions de dollars (2017-2022)&quot;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Année&quot;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;PIB (millions de dollars)&quot;</span><span class="p">,</span>
+    <span class="n">yaxis_tickformat</span><span class="o">=</span><span class="s2">&quot;,.0f&quot;</span><span class="p">,</span> 
+    <span class="n">showlegend</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="graphes-avec-deux-axes">
+<h2>Graphes avec deux axes<a class="headerlink" href="#graphes-avec-deux-axes" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données (précipitations, températures minimales et maximales pour chaque mois)</span>
+<span class="n">months</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Jan&quot;</span><span class="p">,</span> <span class="s2">&quot;Fév&quot;</span><span class="p">,</span> <span class="s2">&quot;Mar&quot;</span><span class="p">,</span> <span class="s2">&quot;Avr&quot;</span><span class="p">,</span> <span class="s2">&quot;Mai&quot;</span><span class="p">,</span> <span class="s2">&quot;Juin&quot;</span><span class="p">,</span> <span class="s2">&quot;Juil&quot;</span><span class="p">,</span> <span class="s2">&quot;Août&quot;</span><span class="p">,</span> <span class="s2">&quot;Sept&quot;</span><span class="p">,</span> <span class="s2">&quot;Oct&quot;</span><span class="p">,</span> <span class="s2">&quot;Nov&quot;</span><span class="p">,</span> <span class="s2">&quot;Déc&quot;</span><span class="p">]</span>
+<span class="n">precipitation</span> <span class="o">=</span> <span class="p">[</span><span class="mi">110</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">75</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">90</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">120</span><span class="p">]</span>  <span class="c1"># en mm</span>
+<span class="n">temp_min</span> <span class="o">=</span> <span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">14</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">20</span><span class="p">]</span>  <span class="c1"># en °C</span>
+<span class="n">temp_max</span> <span class="o">=</span> <span class="p">[</span><span class="mi">30</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">18</span><span class="p">,</span> <span class="mi">17</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">23</span><span class="p">,</span> <span class="mi">26</span><span class="p">,</span> <span class="mi">28</span><span class="p">,</span> <span class="mi">30</span><span class="p">]</span>  <span class="c1"># en °C</span>
+
+<span class="c1"># Création du graphique à barres pour les précipitations</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">go</span><span class="o">.</span><span class="n">Figure</span><span class="p">()</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Bar</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">months</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">precipitation</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Précipitations&quot;</span><span class="p">,</span>
+    <span class="n">marker_color</span><span class="o">=</span><span class="s2">&quot;green&quot;</span><span class="p">,</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="s2">&quot;y2&quot;</span>  <span class="c1"># On associe  l&#39;axe des ordonnées secondaire pour les précipitations</span>
+<span class="p">))</span>
+
+<span class="c1"># Ajout de la courbe des températures minimales</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">months</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">temp_min</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Température Min&quot;</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+    <span class="n">marker_color</span><span class="o">=</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">))</span>
+
+<span class="c1"># Courbe pour des températures maximales</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">add_trace</span><span class="p">(</span><span class="n">go</span><span class="o">.</span><span class="n">Scatter</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">months</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="n">temp_max</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;Température Max&quot;</span><span class="p">,</span>
+    <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lines+markers&quot;</span><span class="p">,</span>
+    <span class="n">marker_color</span><span class="o">=</span><span class="s2">&quot;red&quot;</span><span class="p">,</span>
+    <span class="n">line</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="p">))</span>
+
+<span class="c1"># Mise en forme </span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Graphique climatique&quot;</span><span class="p">,</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">&quot;Mois&quot;</span><span class="p">),</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Température (°C)&quot;</span><span class="p">,</span>
+        <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">35</span><span class="p">]</span>
+    <span class="p">),</span>
+    <span class="n">yaxis2</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+        <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Précipitations (mm)&quot;</span><span class="p">,</span>
+        <span class="nb">range</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">175</span><span class="p">],</span>
+        <span class="n">overlaying</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span>
+        <span class="n">side</span><span class="o">=</span><span class="s2">&quot;right&quot;</span>  <span class="c1"># Positionne cet axe à droite</span>
+    <span class="p">),</span>
+    <span class="n">legend</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mf">1.1</span><span class="p">),</span>
+    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_white&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="graphe-a-barres-empilees-vertical">
+<h2>Graphe à barres empilées vertical<a class="headerlink" href="#graphe-a-barres-empilees-vertical" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données fictives</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Primaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Primaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Secondaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Secondaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Supérieur&#39;</span><span class="p">,</span> <span class="s1">&#39;Supérieur&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Nombre&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Calcule des pourcentages</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Nombre&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">)[</span><span class="s1">&#39;Nombre&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Création du graphique à barres empilées</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+             <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">,</span>
+             <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">,</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">,</span>
+             <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">,</span>         <span class="c1"># Pourcentages sur les barres</span>
+             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">Instruction et Situation Matrimoniale&#39;</span><span class="p">,</span>
+             <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">:</span> <span class="s1">&#39;Pourcentage (%)&#39;</span><span class="p">},</span>
+             <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;#4CAF50&#39;</span><span class="p">,</span> <span class="s1">&#39;#2196F3&#39;</span><span class="p">])</span>  <span class="c1"># Couleurs</span>
+
+<span class="c1"># Personnalisation</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span>
+    <span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span>         <span class="c1"># Format des étiquettes</span>
+    <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span>               <span class="c1"># Pourcentages à l&#39;intérieur des barres</span>
+    <span class="n">textfont_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>              <span class="c1"># Couleur des pourcentages</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span>                            <span class="c1"># Largeur des barres réduite</span>
+<span class="p">)</span>
+
+<span class="c1"># Configuration du layout pour le graphique</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Pourcentage (%)&#39;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">,</span>
+    <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;stack&#39;</span><span class="p">,</span>                     <span class="c1"># pour empiler</span>
+    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_white&#39;</span><span class="p">,</span>
+    <span class="n">yaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;LightGray&#39;</span><span class="p">),</span>   <span class="c1"># Couleur de la grille</span>
+    <span class="n">xaxis</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">gridcolor</span><span class="o">=</span><span class="s1">&#39;LightGray&#39;</span><span class="p">)</span>    <span class="c1"># Couleur de la grille</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="graphe-a-barres-groupees">
+<h2>Graphe à barres groupées<a class="headerlink" href="#graphe-a-barres-groupees" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Primaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Primaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Secondaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Secondaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Supérieur&#39;</span><span class="p">,</span> <span class="s1">&#39;Supérieur&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Nombre&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Calculer des pourcentages </span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Nombre&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">)[</span><span class="s1">&#39;Nombre&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Graphique à barres groupées</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+             <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">,</span>
+             <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">,</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">,</span>
+             <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">,</span>     
+             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">Instruction et Situation Matrimoniale&#39;</span><span class="p">,</span>
+             <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">:</span> <span class="s1">&#39;Pourcentage (%)&#39;</span><span class="p">},</span>
+             <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="n">px</span><span class="o">.</span><span class="n">colors</span><span class="o">.</span><span class="n">qualitative</span><span class="o">.</span><span class="n">Set2</span><span class="p">)</span>
+
+<span class="c1"># Personnalisation</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span>
+    <span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span>     <span class="c1"># Format des étiquettes en pourcentage avec deux chiffres après la virgule</span>
+    <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;outside&#39;</span><span class="p">,</span>           <span class="c1"># Pourcentages à l&#39;extérieur des barres</span>
+    <span class="n">width</span><span class="o">=</span><span class="mf">0.4</span> 
+<span class="p">)</span>
+
+
+<span class="c1"># Ici tu peux aussi configurer la taille du graphique</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Pourcentage (%)&#39;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">,</span>
+    <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;group&#39;</span><span class="p">,</span>  <span class="c1"># Utilisation du mode groupé</span>
+    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_white&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage </span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="graphe-a-barres-empilees-horizontal">
+<h2>Graphe à barres empilées horizontal<a class="headerlink" href="#graphe-a-barres-empilees-horizontal" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données </span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Primaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Primaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Secondaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Secondaire&#39;</span><span class="p">,</span> <span class="s1">&#39;Supérieur&#39;</span><span class="p">,</span> <span class="s1">&#39;Supérieur&#39;</span><span class="p">,</span> <span class="s1">&#39;Doctorat&#39;</span><span class="p">,</span> <span class="s1">&#39;Doctorat&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;Nombre&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">25</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">]</span>
+<span class="p">})</span>
+
+<span class="c1"># Calcule des pourcentages</span>
+<span class="n">data</span><span class="p">[</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Nombre&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="n">data</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">)[</span><span class="s1">&#39;Nombre&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># Graphique à barres empilées horizontal</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+             <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">,</span>
+             <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">,</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">,</span>
+             <span class="n">text</span><span class="o">=</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">,</span>  <span class="c1"># Afficher les pourcentages sur les barres</span>
+             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Répartition en Pourcentage par Niveau d</span><span class="se">\&#39;</span><span class="s1">Instruction et Situation Matrimoniale&#39;</span><span class="p">,</span>
+             <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Pourcentage&#39;</span><span class="p">:</span> <span class="s1">&#39;Pourcentage (%)&#39;</span><span class="p">},</span>
+             <span class="n">color_discrete_sequence</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;purple&#39;</span><span class="p">,</span> <span class="s1">&#39;#2196F3&#39;</span><span class="p">],</span>  <span class="c1"># Couleurs personnalisées : rose et bleu</span>
+             <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">)</span>  <span class="c1"># Orientation horizontale</span>
+
+<span class="c1"># Personnalisation des étiquettes</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_traces</span><span class="p">(</span>
+    <span class="n">texttemplate</span><span class="o">=</span><span class="s1">&#39;%</span><span class="si">{text:.2f}</span><span class="s1">%&#39;</span><span class="p">,</span>  <span class="c1"># Format des étiquettes en pourcentage</span>
+    <span class="n">textposition</span><span class="o">=</span><span class="s1">&#39;inside&#39;</span><span class="p">,</span>        <span class="c1"># Pourcentages à l&#39;intérieur des barres</span>
+    <span class="n">textfont_color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span>        <span class="c1"># Couleur des pourcentages en blanc</span>
+<span class="p">)</span>
+
+<span class="c1"># Configuration du layout</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Pourcentage (%)&#39;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Niveau d</span><span class="se">\&#39;</span><span class="s1">instruction&#39;</span><span class="p">,</span>
+    <span class="n">barmode</span><span class="o">=</span><span class="s1">&#39;stack&#39;</span><span class="p">,</span>              <span class="c1"># Utilisation du mode empilé</span>
+    <span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_white&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="histogramme">
+<h2>Histogramme<a class="headerlink" href="#histogramme" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Revenus (en milliers de dollars)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;revenu&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>       <span class="c1"># Moyenne de 50k, écart-type de 15k</span>
+<span class="p">})</span>
+
+<span class="c1"># Création de l&#39;histogramme</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;revenu&#39;</span><span class="p">,</span> <span class="n">nbins</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>     <span class="c1"># nombre de barres</span>
+                   <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Distribution des revenus&quot;</span><span class="p">,</span>
+                   <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;revenu&#39;</span><span class="p">:</span> <span class="s2">&quot;Revenu (en milliers de dollars)&quot;</span><span class="p">})</span>
+
+<span class="c1"># Personnalisation de l&#39;histogramme</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s2">&quot;Revenu (en milliers de dollars)&quot;</span><span class="p">,</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Fréquence&quot;</span><span class="p">,</span>
+    <span class="n">bargap</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>                                     <span class="c1"># Espace entre les barres</span>
+    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_white&quot;</span>                         <span class="c1"># Fond blanc</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="box-plot">
+<h2>Box-plot<a class="headerlink" href="#box-plot" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;revenu&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># Moyenne de 50k, écart-type de 15k</span>
+<span class="p">})</span>
+
+<span class="c1"># Box-plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;revenu&#39;</span><span class="p">,</span> 
+              <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Box-plot des revenus individuels&quot;</span><span class="p">,</span>
+              <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;revenu&#39;</span><span class="p">:</span> <span class="s2">&quot;Revenu (en milliers de dollars)&quot;</span><span class="p">})</span>
+
+<span class="c1"># Personnalisation </span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s2">&quot;Revenu (en milliers de dollars)&quot;</span><span class="p">,</span>
+    <span class="n">template</span><span class="o">=</span><span class="s2">&quot;plotly_white&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Pour la reproductibilité</span>
+<span class="n">n_observations</span> <span class="o">=</span> <span class="mi">50</span>
+
+<span class="c1"># Classes du collège au lycée</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;6ème&#39;</span><span class="p">,</span> <span class="s1">&#39;5ème&#39;</span><span class="p">,</span> <span class="s1">&#39;4ème&#39;</span><span class="p">,</span> <span class="s1">&#39;3ème&#39;</span><span class="p">,</span> <span class="s1">&#39;Seconde&#39;</span><span class="p">,</span> <span class="s1">&#39;Première&#39;</span><span class="p">,</span> <span class="s1">&#39;Terminale&#39;</span><span class="p">]</span>
+
+<span class="c1"># DataFrame </span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Classe&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">classes</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">),</span>
+    <span class="s1">&#39;Âge&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">19</span><span class="p">,</span> <span class="n">n_observations</span><span class="p">)</span>  <span class="c1"># Âges entre 11 et 18</span>
+<span class="p">})</span>
+
+<span class="c1"># Création du box plot</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">box</span><span class="p">(</span><span class="n">data</span><span class="p">,</span>
+             <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Classe&#39;</span><span class="p">,</span>
+             <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Âge&#39;</span><span class="p">,</span>
+             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Âges et Classes des élèves&#39;</span><span class="p">,</span>
+             <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Âge&#39;</span><span class="p">:</span> <span class="s1">&#39;Âge (années)&#39;</span><span class="p">,</span> <span class="s1">&#39;Classe&#39;</span><span class="p">:</span> <span class="s1">&#39;Classe&#39;</span><span class="p">},</span>
+             <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Classe&#39;</span><span class="p">,</span>  <span class="c1"># Coloration par classe</span>
+             <span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_white&#39;</span><span class="p">)</span>  <span class="c1"># Utilisation d&#39;un template blanc</span>
+
+<span class="c1"># Configuration du layout</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">update_layout</span><span class="p">(</span>
+    <span class="n">yaxis_title</span><span class="o">=</span><span class="s1">&#39;Âge (années)&#39;</span><span class="p">,</span>
+    <span class="n">xaxis_title</span><span class="o">=</span><span class="s1">&#39;Classe&#39;</span>
+<span class="p">)</span>
+
+<span class="c1"># Affichage</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="nuage-de-points">
+<h2>Nuage de points<a class="headerlink" href="#nuage-de-points" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Données</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Pour la reproductibilité</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">60</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>  <span class="c1"># Âge entre 20 et 60 ans</span>
+    <span class="s1">&#39;Revenu&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">20000</span><span class="p">,</span> <span class="mi">100000</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span>  <span class="c1"># Revenu entre 20 000 et 100 000</span>
+    <span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">([</span><span class="s1">&#39;Célibataire&#39;</span><span class="p">,</span> <span class="s1">&#39;Marié&#39;</span><span class="p">,</span> <span class="s1">&#39;Divorcé&#39;</span><span class="p">],</span> <span class="n">size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># Situation matrimoniale</span>
+<span class="p">})</span>
+
+<span class="c1"># Création du nuage de points</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">px</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> 
+                 <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> 
+                 <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Revenu&#39;</span><span class="p">,</span> 
+                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;Situation matrimoniale&#39;</span><span class="p">,</span>  <span class="c1"># Couleur en fonction de la situation matrimoniale</span>
+                 <span class="n">size</span><span class="o">=</span><span class="s1">&#39;Revenu&#39;</span><span class="p">,</span>                   <span class="c1"># Taille des points proportionnelle au revenu</span>
+                 <span class="n">hover_name</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>           <span class="c1"># Pour Afficher l&#39;index dans les info-bulles</span>
+                 <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Revenu en fonction de l</span><span class="se">\&#39;</span><span class="s1">Âge&#39;</span><span class="p">,</span>
+                 <span class="n">labels</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Age&#39;</span><span class="p">:</span> <span class="s1">&#39;Âge (ans)&#39;</span><span class="p">,</span> <span class="s1">&#39;Revenu&#39;</span><span class="p">:</span> <span class="s1">&#39;Revenu (en milliers de dollars)&#39;</span><span class="p">},</span>
+                 <span class="n">template</span><span class="o">=</span><span class="s1">&#39;plotly_white&#39;</span><span class="p">)</span>
+
+<span class="c1"># Affichage </span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p><strong>Julien Bidias Assala</strong>
+<br>
+<em>Ingénieur Statisticien économiste</em>
+<br>
+<strong>Contacts :</strong>
+<br>
+<a href="https://www.linkedin.com/in/julien-bidias-a57b941b7/"> LinkedIn</a>
+<br>
+<a href="https://github.com/JulienBIDIAS"> GitHub</a>
+<br>
+<a href="mailto:julienbidias246@gmail.com"> Gmail</a></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="intro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Welcome to your Jupyter Book</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Création de Pipelines avec Sklearn</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#importation-des-librairies">Importation des librairies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#separation-des-types-de-variables">Separation des types de variables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#definition-des-transformer-pour-chaque-type-de-variable">Definition des transformer pour chaque type de variable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-des-transformers-sur-chaque-type-de-variable">Application des transformers sur chaque type de variable</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#creation-du-pipeline">Creation du pipeline</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#application-a-un-jeu-de-donnees">Application a un jeu de données</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#data-viz-avec-plotly">Data viz avec plotly</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bar-plot-empilees">Bar plot empilées</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#barplot">Barplot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphes-avec-deux-axes">Graphes avec deux axes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphe-a-barres-empilees-vertical">Graphe à barres empilées vertical</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphe-a-barres-groupees">Graphe à barres groupées</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graphe-a-barres-empilees-horizontal">Graphe à barres empilées horizontal</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#histogramme">Histogramme</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#box-plot">Box-plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#nuage-de-points">Nuage de points</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By The Jupyter Book Community
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
