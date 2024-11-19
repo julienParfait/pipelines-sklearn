@@ -9,7 +9,6 @@ logo: logo.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-  include_output: true
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -32,8 +31,9 @@ html:
   use_issues_button: true
   use_repository_button: true
 
-  jupyter:
-  execute:
-  include_output: true
+sphinx:
+  config:
+    html_js_files:
+    - https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js
     
 
