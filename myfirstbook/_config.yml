@@ -9,6 +9,7 @@ logo: logo.png
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
+  include_output: true
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -30,3 +31,9 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
+
+  jupyter:
+  execute:
+  include_output: true
+    
+
