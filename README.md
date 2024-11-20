@@ -3,10 +3,14 @@
 ```sh
 How to build a jupyter notebook website for monitoring and leanring ?
 ```
+
+
 [![Notebook site](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://julienparfait.github.io/pipelines-sklearn/pipe.html)
 [![Documentation](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://medium.com/@dr.junghoonson/simplest-way-to-publish-your-jupyter-notebooks-on-the-open-web-using-jupyter-book-and-github-pages-eea144031d6f)
 
-> 🧑‍🚀 **Seasoned astronaut?** Have fun!
+> 🧑‍🚀 Have fun!
+
+
 ![portfolio](https://julienparfait.github.io/)
 
 
